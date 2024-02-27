@@ -1,0 +1,205 @@
+@mixin bp($class) {
+	@if $class == mobile {
+		@media (min-width: 640px) {
+			@content;
+		}
+	} @else if $class == tablet {
+		@media (min-width: 992px) {
+			@content;
+		}
+	} @else if $class == tablet-only {
+		@media (max-width: 992px) {
+			@content;
+		}
+	} @else if $class == laptop {
+		@media (min-width: 1024px) {
+			@content;
+		}
+	} @else if $class == desktop {
+		@media (min-width: 1280px) {
+			@content;
+		}
+	} @else if $class == cinema {
+		@media (min-width: 1536px) {
+			@content;
+		}
+	}
+}
+
+@mixin no-margin {
+	margin: 0;
+}
+@mixin labotomized-owl {
+	* + * {
+		margin: 0.75em 0 0;
+	}
+}
+// Variables
+@import url("https://fonts.googleapis.com/css2?family=Roboto+Condensed:wght@300&display=swap");
+$g-font-family: "Roboto Condensed", sans-serif;
+$g-line-height: 1.5 !default;
+$g-spacing: $g-line-height * 1em;
+$black: #000;
+$white: #fff;
+$g-font-color: #464646;
+$g-border-color: lighten($g-font-color, 15%);
+$g-background-color-dark: #18181b;
+$g-background-color-light: #f2f2f2;
+
+// global
+body,
+html {
+	min-height: 100%;
+	width: 100%;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	font-size: 1em;
+	line-height: 1.2;
+	background: $g-background-color-dark;
+	font-family: $g-font-family;
+	font-weight: 300;
+	box-sizing: border-box;
+	color: $white;
+	.wrapper {
+		width: 100%;
+		max-width: 1000px;
+		margin: 0 auto;
+		position: relative;
+		padding: $g-spacing;
+	}
+}
+*,
+*:before,
+*:after {
+	box-sizing: inherit;
+}
+
+* {
+	@include labotomized-owl;
+}
+
+.table-responsive {
+	border-collapse: collapse;
+	margin: $g-spacing / 2 0;
+	table-layout: fixed;
+	@include no-margin;
+	width: 100%;
+	color: $g-font-color;
+	* {
+		font-size: 13px;
+	}
+	i {
+		&.blank {
+			display: none;
+		}
+	}
+
+	th {
+		border-bottom: 1px solid shade($g-border-color, 25%);
+		text-align: left;
+		padding: $g-spacing / 2 $g-spacing / 1.4;
+		text-align: center;
+		&:not([data-title]) {
+			font-weight: bold;
+			@include bp(tablet) {
+				border-right: 1px solid #037f9e;
+			}
+		}
+		&.table-column {
+			width: 200px;
+		}
+		&.row {
+			background: #09bad6;
+			color: $white;
+		}
+	}
+	th[data-title]:before,
+	td[data-title]:before {
+		content: attr(data-title) ":\00A0";
+		font-weight: bold;
+		text-align: left;
+		@include bp(tablet) {
+			content: none;
+		}
+	}
+	tr {
+		margin: 0 0 0rem 0;
+		&:nth-child(odd) {
+			background: lighten($g-background-color-light, 5%);
+
+			&.header-row {
+				background: #037f9e !important;
+				color: $white;
+			}
+		}
+		&:nth-child(even) {
+			background: lighten($g-background-color-light, 1%);
+		}
+		td {
+			/* Behave  like a "row" */
+			border: 0;
+			border-bottom: 1px solid darken($g-background-color-light, 11%);
+			position: relative;
+			padding-left: 50%;
+			padding-right: $g-spacing / 2;
+			text-align: right;
+			padding: 15px;
+			@include bp(tablet) {
+				vertical-align: top;
+				border-bottom: 0;
+				padding: $g-spacing;
+				border-right: 1px solid $white;
+				text-align: center;
+			}
+			ul {
+				margin-left: 0;
+				margin-bottom: 5px;
+				padding: 0 0 0 $g-spacing;
+
+				li {
+					padding: 3px 0;
+				}
+			}
+		}
+	}
+
+	@include bp(tablet-only) {
+		/* Force table to not be like tables anymore */
+		table,
+		thead,
+		tbody,
+		th,
+		td,
+		tr {
+			display: block;
+			vertical-align: middle;
+		}
+
+		/* Hide table headers (but not display: none;, for accessibility) */
+		thead tr {
+			position: absolute;
+			top: -9999px;
+			left: -9999px;
+		}
+
+		tr {
+			td {
+				&:before {
+					/* Now like a table header */
+					position: absolute;
+					/* Top/left values mimic padding */
+					//top: 0;
+					left: 6px;
+					width: 45%;
+					padding-right: 10px;
+					white-space: nowrap;
+					padding-left: $g-spacing / 2;
+				}
+				&.empty {
+					display: none;
+				}
+			}
+		}
+	}
+}
